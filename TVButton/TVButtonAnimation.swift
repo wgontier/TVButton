@@ -41,16 +41,16 @@ internal class TVButtonAnimation {
             shaowOffsetAnimation.toValue = NSValue(cgSize: targetShadowOffset)
             shaowOffsetAnimation.duration = animationDuration
             shaowOffsetAnimation.isRemovedOnCompletion = false
-            shaowOffsetAnimation.fillMode = kCAFillModeForwards
-            shaowOffsetAnimation.timingFunction = CAMediaTimingFunction(name: "easeOut")
+            shaowOffsetAnimation.fillMode = CAMediaTimingFillMode.forwards
+            shaowOffsetAnimation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName(rawValue: "easeOut"))
             tvButton.layer.add(shaowOffsetAnimation, forKey: "shadowOffset")
             CATransaction.commit()
             let shadowOpacityAnimation = CABasicAnimation(keyPath: "shadowOpacity")
             shadowOpacityAnimation.toValue = 0.6
             shadowOpacityAnimation.duration = animationDuration
             shadowOpacityAnimation.isRemovedOnCompletion = false
-            shadowOpacityAnimation.fillMode = kCAFillModeForwards
-            shadowOpacityAnimation.timingFunction = CAMediaTimingFunction(name: "easeOut")
+            shadowOpacityAnimation.fillMode = CAMediaTimingFillMode.forwards
+            shadowOpacityAnimation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName(rawValue: "easeOut"))
             tvButton.layer.add(shadowOpacityAnimation, forKey: "shadowOpacityAnimation")
             CATransaction.commit()
         }
@@ -84,7 +84,7 @@ internal class TVButtonAnimation {
             let targetScaleTransform = CATransform3DMakeScale(highlightedScale, highlightedScale, highlightedScale)
             let combinedTransform = CATransform3DConcat(combinedRotateTranslateTransform, targetScaleTransform)
             
-            UIView.animate(withDuration: animationDuration, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: { () -> Void in
+            UIView.animate(withDuration: animationDuration, delay: 0.0, options: UIView.AnimationOptions.curveEaseOut, animations: { () -> Void in
                 tvButton.layer.transform = combinedTransform
                 tvButton.specularView.alpha = specularAlpha
                 tvButton.specularView.center = point
@@ -93,13 +93,13 @@ internal class TVButtonAnimation {
                     let scale = 1 + maxScaleDelta*CGFloat(adjusted/tvButton.containerView.subviews.count)
                     let subview = tvButton.containerView.subviews[i]
                     if subview != tvButton.specularView {
-                        subview.contentMode = UIViewContentMode.redraw
+                        subview.contentMode = UIView.ContentMode.redraw
                         subview.frame.size = CGSize(width: tvButton.bounds.size.width*scale, height: tvButton.bounds.size.height*scale)
                     }
                 }
 
                 }, completion: nil)
-            UIView.animate(withDuration: 0.16, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: { () -> Void in
+            UIView.animate(withDuration: 0.16, delay: 0.0, options: UIView.AnimationOptions.curveEaseOut, animations: { () -> Void in
                 for i in 1 ..< tvButton.containerView.subviews.count {
                     let subview = tvButton.containerView.subviews[i]
                     let xParallax = tvButton.parallaxIntensity*parallaxIntensityXFactor
@@ -131,19 +131,19 @@ internal class TVButtonAnimation {
             let shaowOffsetAnimation = CABasicAnimation(keyPath: "shadowOffset")
             shaowOffsetAnimation.toValue = NSValue(cgSize: targetShadowOffset)
             shaowOffsetAnimation.duration = animationDuration
-            shaowOffsetAnimation.fillMode = kCAFillModeForwards
+            shaowOffsetAnimation.fillMode = CAMediaTimingFillMode.forwards
             shaowOffsetAnimation.isRemovedOnCompletion = false
-            shaowOffsetAnimation.timingFunction = CAMediaTimingFunction(name: "easeOut")
+            shaowOffsetAnimation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName(rawValue: "easeOut"))
             tvButton.layer.add(shaowOffsetAnimation, forKey: "shadowOffset")
             let scaleAnimation = CABasicAnimation(keyPath: "transform")
             scaleAnimation.toValue = NSValue(caTransform3D: targetScaleTransform)
             scaleAnimation.duration = animationDuration
             scaleAnimation.isRemovedOnCompletion = false
-            scaleAnimation.fillMode = kCAFillModeForwards
-            scaleAnimation.timingFunction = CAMediaTimingFunction(name: "easeOut")
+            scaleAnimation.fillMode = CAMediaTimingFillMode.forwards
+            scaleAnimation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName(rawValue: "easeOut"))
             tvButton.layer.add(scaleAnimation, forKey: "scaleAnimation")
             CATransaction.commit()
-            UIView.animate(withDuration: animationDuration, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: { () -> Void in
+            UIView.animate(withDuration: animationDuration, delay: 0.0, options: UIView.AnimationOptions.curveEaseOut, animations: { () -> Void in
                 tvButton.transform = CGAffineTransform.identity
                 tvButton.specularView.alpha = 0.0
                 for i in 0 ..< tvButton.containerView.subviews.count {
@@ -158,7 +158,7 @@ internal class TVButtonAnimation {
     // MARK: Convenience
     
     func degreesToRadians(_ value:CGFloat) -> CGFloat {
-        return value * CGFloat(M_PI) / 180.0
+        return value * CGFloat(Double.pi) / 180.0
     }
 
 }
