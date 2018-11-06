@@ -11,20 +11,25 @@ import Foundation
 /**
 Parallax Layer Object
 */
-public struct TVButtonLayer {
+public class TVButtonLayer : NSObject {
     /// UIImage to display. It is essential that all images have the same dimensions.
     var internalImage: UIImage?
-}
-
-public extension TVButtonLayer {
-    /**
-     Initialise the TVButton layer by passing a UIImage
-     - Parameter image: UIImage to display. It is essential that all images have the same dimensions.
-     */
-    public init(image: UIImage) {
-        self.init(internalImage: image)
+    
+    @objc convenience public init(image: UIImage) {
+        self.init()
+        self.internalImage = image
     }
 }
+
+//public extension TVButtonLayer {
+//    /**
+//     Initialise the TVButton layer by passing a UIImage
+//     - Parameter image: UIImage to display. It is essential that all images have the same dimensions.
+//     */
+//    public init(image: UIImage) {
+//        self.init(internalImage: image)
+//    }
+//}
 
 /**
  TVButton Object
@@ -43,11 +48,14 @@ open class TVButton: UIButton, UIGestureRecognizerDelegate {
     // MARK: Public variables
     
     /// Stack of TVButtonLayers inside the button
-    open var layers: [TVButtonLayer]? {
+    @objc open var layers: [TVButtonLayer]? {
         didSet {
             // Remove existing parallax layer views
             for subview in containerView.subviews {
-                subview.removeFromSuperview()
+                if (subview.tag & 0x2000 != 0)
+                {
+                    subview.removeFromSuperview()
+                }
             }
             // Instantiate an imageview with corners for every layer
             for layer in layers! {
@@ -55,21 +63,31 @@ open class TVButton: UIButton, UIGestureRecognizerDelegate {
                 imageView.layer.cornerRadius = cornerRadius
                 imageView.clipsToBounds = true
                 imageView.layer.needsDisplayOnBoundsChange = true
+                imageView.tag |= 0x2000;
                 containerView.addSubview(imageView)
             }
-            // Add specular shine effect
-            let frameworkBundle = Bundle(for: TVButton.self)
-            let specularViewPath = frameworkBundle.path(forResource: "Specular", ofType: "png")
-            specularView.image = UIImage(contentsOfFile:specularViewPath!)
+//            // Add specular shine effect
+//            let frameworkBundle = Bundle(for: TVButton.self)
+//            let specularViewPath = frameworkBundle.path(forResource: "Specular", ofType: "png")
+//            specularView.image = UIImage(contentsOfFile:specularViewPath!)
+//            self.containerView.addSubview(specularView)
+        }
+    }
+    
+    
+    @objc open var specular: TVButtonLayer? {
+        didSet {
+            specularView.image = specular!.internalImage
             self.containerView.addSubview(specularView)
         }
     }
 
+    
     /// Determines the intensity of the parallax depth effect. Default is 1.0.
-    open var parallaxIntensity: CGFloat = defaultParallaxIntensity
+    @objc open var parallaxIntensity: CGFloat = defaultParallaxIntensity
 
     /// Shadow color for the TVButton. Default is black.
-    open var shadowColor: UIColor = UIColor.black {
+    @objc open var shadowColor: UIColor = UIColor.black {
         didSet {
             self.layer.shadowColor = shadowColor.cgColor
         }
